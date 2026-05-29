@@ -4,6 +4,7 @@ import {prisma} from "../db/prisma";
 import jwt from "jsonwebtoken";
 import { registerSchema,loginSchema } from "../schemas/auth.schema";
 import { JWT_SECRET } from "../lib/constants";
+import { string } from "zod";
 
 
 export async function register(req:Request, res:Response){
@@ -43,5 +44,25 @@ export async function register(req:Request, res:Response){
 
 
 export async function login(req: Request,res:Response){
+    const decoded = loginSchema.safeParse(req.body);
+    if (!decoded.success){
+      return res.status(400).json({message:"invalid request body"});
+    }
+    const {email, password} = decoded.data;
 
+    try{
+      const user = await prisma.user.findUnique({where : {email}})
+      if (!user){
+        return res.status(400).json({message:"failed to find user"})
+      }
+      const comparePassword = await bcrypt.compare(password,user.password);
+      if (!comparePassword){
+        return res.status(400).json({message:"Invalid Password"})
+      }
+      const token = jwt.sign({id:user.id}, JWT_SECRET as string)
+      res.cookie("token",token);
+      return res.status(200).json({user: user.name,token})
+    }catch(error){
+      return res.status(500).json({error : "failed to login user"})
+    }
 }
