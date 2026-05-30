@@ -4,7 +4,7 @@ import {prisma} from "../db/prisma";
 import jwt from "jsonwebtoken";
 import { registerSchema,loginSchema } from "../schemas/auth.schema";
 import { JWT_SECRET } from "../lib/constants";
-import { string } from "zod";
+
 
 
 export async function register(req:Request, res:Response){

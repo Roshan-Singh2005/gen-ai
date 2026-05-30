@@ -28,10 +28,6 @@ const cleaned = rawText
     .replace(/```json\n?|```/g, "")
     .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
     .trim();
-  return JSON.parse(cleaned);
+  return cleaned;
 
-}
-
-const test = await runLLM("how many days are there in a january");
-console.log(test);
-
+};
