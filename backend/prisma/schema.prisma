@@ -12,6 +12,7 @@ model User {
   name String
   email String @unique
   password String
+  generations Generation[]
 
 }
 
@@ -20,4 +21,11 @@ model Generation {
   prompt   String
   response String
   userId   String
+  user     User   @relation(fields:[userId],references:[id],onDelete: Cascade)
+}
+
+model blackListToken {
+  token String @unique
+  createdAt DateTime  @default(now())
+
 }

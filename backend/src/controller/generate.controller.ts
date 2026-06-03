@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { promptSchema } from "../schemas/generate.schema";
 import { prisma } from "../db/prisma";
 import { runLLM } from "../services/ai.service";
-import { ResponseSchema } from "@google/generative-ai";
 
 
 
